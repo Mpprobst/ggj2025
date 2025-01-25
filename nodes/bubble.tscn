@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bg2jbmsw5oipr"]
+
+[ext_resource type="Script" path="res://scripts/bubble.gd" id="1_0qrga"]
+[ext_resource type="Texture2D" uid="uid://dbtojipvba70j" path="res://icon.svg" id="1_gxox6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kpx54"]
+
+[node name="bubble" type="Area2D"]
+position = Vector2(256, 0)
+script = ExtResource("1_0qrga")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(124, -128)
+scale = Vector2(2, 2)
+texture = ExtResource("1_gxox6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(128, -128)
+scale = Vector2(12, 12)
+shape = SubResource("CircleShape2D_kpx54")

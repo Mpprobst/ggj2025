@@ -18,8 +18,6 @@ var area_width = 512
 var row_size = 4
 var element_size = Vector2(128, 128)
 
-var last_background : Node2D
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	cull_height = scroll_area.texture.get_height() * 1.5
@@ -40,16 +38,22 @@ func _process(delta):
 			clear_bubbles()
 	
 	# when background height hits areaheight, spawn a new one
-	if last_background == null or last_background.global_position.y >= 512:
-		var background_pos = Vector2(0,0)
-		if last_background != null:
-			background_pos = last_background.global_position + Vector2(0, -512)
-		last_background = background_image.instantiate()
-		add_child(last_background)
-		move_child(last_background, 0)
-		last_background.global_position = background_pos
-
+	var last_background = null
+	if backgrounds.size() > 0:
+		last_background = backgrounds[backgrounds.size()-1]
+	if last_background == null:
+		last_background = spawn_background(Vector2(0,0))
+		
+	if last_background.global_position.y >= 512:
+		spawn_background(last_background.global_position)
 	
+	#if backgrounds.size() > 0:
+	#	var first_background = backgrounds[0]
+	#	if first_background.global_position.y >= cull_height * 2:
+	#		backgrounds[0].queue_free()
+	#		backgrounds.remove_at(0)
+		
+		
 	# TODO: when position is low enough, spawn more sheets
 	# need a list of prefabs to choose from
 	# the mouse_controller can trigger certain events: speed boost, different pattern, dance party
@@ -92,6 +96,25 @@ func clear_bubbles():
 	
 	for bubble in bubbles:
 		bubble.global_position += diff
+	
+	if backgrounds[0].global_position.y >= cull_height *2:
+		backgrounds[0].queue_free()
+		backgrounds.remove_at(0)
+	
+	diff.y -= element_size.y
+	for background in backgrounds:
+		background.global_position += diff
 		
 	# TODO: maintain an array of backgrounds and delete similarly as above
 	
+func spawn_background(pos):
+	if pos != Vector2(0,0):
+		pos += Vector2(0, -512)
+	
+	var last_background = background_image.instantiate()
+	backgrounds.append(last_background)
+	add_child(last_background)
+	move_child(last_background, 0)
+	last_background.global_position = pos
+	
+	return last_background

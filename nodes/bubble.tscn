@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bg2jbmsw5oipr"]
+[gd_scene load_steps=5 format=3 uid="uid://bg2jbmsw5oipr"]
 
 [ext_resource type="Script" path="res://scripts/bubble.gd" id="1_0qrga"]
 [ext_resource type="Texture2D" uid="uid://dbtojipvba70j" path="res://icon.svg" id="1_gxox6"]
+[ext_resource type="AudioStream" uid="uid://cknwwsj1i1ma2" path="res://pop.mp3" id="3_2fj4t"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kpx54"]
 
@@ -15,3 +16,7 @@ texture = ExtResource("1_gxox6")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(12, 12)
 shape = SubResource("CircleShape2D_kpx54")
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_2fj4t")
+bus = &"Sfx"

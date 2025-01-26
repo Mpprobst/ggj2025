@@ -1,12 +1,15 @@
 extends Node2D
 
 @export var scroll_area : Sprite2D
-@export var bubbles_parent : Node2D
-@export var bubble_norm : PackedScene
-@export var background_image : PackedScene
 var speed = 100;
 
+@export var bubbles_parent : Node2D
+@export var bubble_norm : PackedScene
+
+@export var background_image : PackedScene
+
 var bubbles = []
+var backgrounds = []
 
 var spawn_height = -512
 var cull_height = 1024
@@ -28,15 +31,23 @@ func _process(delta):
 	
 	if bubbles.size() > 0:
 		var y = (bubbles[bubbles.size()-1].global_position + spawn_delta()).y
+
 		if y > spawn_height:
 			spawn_bubbles()
+		y = bubbles[0].global_position.y
+
+		if y >= cull_height:
+			clear_bubbles()
 	
 	# when background height hits areaheight, spawn a new one
 	if last_background == null or last_background.global_position.y >= 512:
+		var background_pos = Vector2(0,0)
+		if last_background != null:
+			background_pos = last_background.global_position + Vector2(0, -512)
 		last_background = background_image.instantiate()
 		add_child(last_background)
 		move_child(last_background, 0)
-		last_background.global_position = Vector2(0, 0)
+		last_background.global_position = background_pos
 
 	
 	# TODO: when position is low enough, spawn more sheets
@@ -68,3 +79,19 @@ func spawn_bubble_single(spawn_pos):
 	bubble.global_position = spawn_pos
 	return bubble
 
+func clear_bubbles():
+	var bub = bubbles[0]
+	while bub.global_position.y >= cull_height:
+		bub.queue_free()
+		bubbles.remove_at(0)
+		bub = bubbles[0]
+	
+	# move my position back to 0,0 and move everything by that diff
+	var diff = position
+	position = Vector2(0,0)
+	
+	for bubble in bubbles:
+		bubble.global_position += diff
+		
+	# TODO: maintain an array of backgrounds and delete similarly as above
+	

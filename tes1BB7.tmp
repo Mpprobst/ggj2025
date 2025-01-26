@@ -9,7 +9,7 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="scroller" type="Sprite2D" parent="."]
-self_modulate = Color(0.666667, 0.666667, 0.666667, 0.243137)
+self_modulate = Color(0.666569, 0.666569, 0.666569, 1)
 texture = ExtResource("1_hlsg1")
 offset = Vector2(0, 512)
 
@@ -44,11 +44,8 @@ position = Vector2(384, -128)
 visible = false
 position = Vector2(-384, -384)
 
-[node name="Node2D" type="Node2D" parent="scroller/scrollarea"]
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, 512)
-zoom = Vector2(0.25, 0.25)
 
 [node name="mouse_controller" type="Node2D" parent="." node_paths=PackedStringArray("line")]
 script = ExtResource("4_upcrl")

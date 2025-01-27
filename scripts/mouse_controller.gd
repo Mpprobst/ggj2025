@@ -1,17 +1,24 @@
 extends Node2D
+@export var scroller : Scroller
 
 @export var follow_speed = 10
 @export var click_radius = 24
 var bonus_radius = 0
 var max_combo = 4
-@export var line_point_ct = 16
+var line_point_ct = 16
 @export var line : Line2D
 
 var combo = 0
 
+@export var score_text : Label
+@export var combo_text : Label
+@export var reset_button : Button
+
+var score = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	reset_button.pressed.connect(self.restart)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,8 +26,11 @@ func _process(delta):
 	var mousepos = get_local_mouse_position()
 	draw_hit_preview()
 
+func restart():
+	get_tree().reload_current_scene()
+
 func get_radius():
-	return click_radius + bonus_radius * combo / max_combo
+	return click_radius + bonus_radius
 
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed():
@@ -43,22 +53,36 @@ func _input(event):
 				var hit_dir = hit.collider.global_position - pos
 				var len = hit_dir.length()
 				var perfect_hit = len <  get_radius()
-				(hit.collider as Bubble).pop(perfect_hit)
+				(hit.collider as Bubble).pop(perfect_hit, hit_ct)
 				if perfect_hit:
 					perfect_hit_ct += 1
 				hit_ct += 1
 			
-			
-			# STRETCH: popping a cute pattern in the bubbles will yield a power up
-			# pattern ideas: Tetris piece, cross, H -> I, 
-			# patterns (16): smiley
-		if float(perfect_hit_ct) / hit_ct > 0.5:
-			combo += 1
-			if combo >= max_combo:
-				bonus_radius = 38
+		
+		score += perfect_hit_ct * 100
+		score += (hit_ct - perfect_hit_ct) * 33
+		score_text.text = "Score: " + str(score)
+		
+		scroller.speed = 100 + score / 200
+		
+		# STRETCH: popping a cute pattern in the bubbles will yield a power up
+		# pattern ideas: Tetris piece, cross, H -> I, 
+		# patterns (16): smiley
+		if float(perfect_hit_ct) / hit_ct >= 0.5:
+			combo += hit_ct
+			print(combo)
+			if combo >= max_combo * 8:
+				bonus_radius = 0
+				combo = 0
+			if combo >= max_combo * 5:
+				bonus_radius = 252
+			elif combo >= max_combo:
+				bonus_radius = 68
 				# TODO: play cool sfx to indicate combo
 		else:
 			combo = 0
+			bonus_radius = 0
+		combo_text.text = "combo x " + str(combo)
 			
 func draw_hit_preview():
 	# clear points

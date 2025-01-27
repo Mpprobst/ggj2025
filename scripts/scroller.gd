@@ -1,7 +1,9 @@
+class_name Scroller
+
 extends Node2D
 
 @export var scroll_area : Sprite2D
-var speed = 100;
+@export var speed = 100;
 
 @export var bubbles_parent : Node2D
 @export var bubble_norm : PackedScene
@@ -17,6 +19,8 @@ var area_width = 512
 
 var row_size = 4
 var element_size = Vector2(128, 128)
+
+var score = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

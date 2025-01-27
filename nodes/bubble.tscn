@@ -1,22 +1,32 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg2jbmsw5oipr"]
+[gd_scene load_steps=8 format=3 uid="uid://bg2jbmsw5oipr"]
 
 [ext_resource type="Script" path="res://scripts/bubble.gd" id="1_0qrga"]
-[ext_resource type="Texture2D" uid="uid://dbtojipvba70j" path="res://icon.svg" id="1_gxox6"]
+[ext_resource type="AudioStream" uid="uid://ca56d07nb2xq4" path="res://Bubble_Pop_high.mp3" id="2_n5q8n"]
 [ext_resource type="AudioStream" uid="uid://cknwwsj1i1ma2" path="res://pop.mp3" id="3_2fj4t"]
+[ext_resource type="AudioStream" uid="uid://b16gf30e57i2c" path="res://Bubble_Pop_low.mp3" id="3_8c5j3"]
+[ext_resource type="Texture2D" uid="uid://cyyj4vrj8wfvh" path="res://sprites/bubble_sprites_128.png" id="5_agtg2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kpx54"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_luah7"]
+resource_local_to_scene = true
+atlas = ExtResource("5_agtg2")
+region = Rect2(0, 128, 128, 128)
+
 [node name="bubble" type="Area2D"]
 script = ExtResource("1_0qrga")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
-texture = ExtResource("1_gxox6")
+good_clips = Array[AudioStream]([ExtResource("2_n5q8n")])
+bad_clips = Array[AudioStream]([ExtResource("3_8c5j3")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 scale = Vector2(12, 12)
 shape = SubResource("CircleShape2D_kpx54")
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_2fj4t")
 bus = &"Sfx"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_luah7")

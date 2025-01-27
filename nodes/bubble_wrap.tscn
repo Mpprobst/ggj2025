@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2vxy5cbn8w8r"]
 
-[ext_resource type="Texture2D" uid="uid://b5bomuc8q8fgw" path="res://sprites/background_512.png" id="1_gifcr"]
+[ext_resource type="Texture2D" uid="uid://bcb2x4tlt4kk3" path="res://sprites/background_1024.png" id="1_16ue6"]
 
 [node name="bubble_wrap" type="Sprite2D"]
-scale = Vector2(2, 2)
-texture = ExtResource("1_gifcr")
-offset = Vector2(0, -256)
+modulate = Color(0.544974, 0.544974, 0.544974, 0.537255)
+texture = ExtResource("1_16ue6")
+offset = Vector2(0, -512)

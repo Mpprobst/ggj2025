@@ -1,0 +1,96 @@
+[gd_scene load_steps=8 format=3 uid="uid://bw3iv6w7nh8g6"]
+
+[ext_resource type="Texture2D" uid="uid://dkwj6e5tesjwn" path="res://sprites/nebula_wrapped.jpg" id="1_7v4h7"]
+[ext_resource type="Script" path="res://scripts/scroller.gd" id="2_xavpo"]
+[ext_resource type="PackedScene" uid="uid://bg2jbmsw5oipr" path="res://nodes/bubble.tscn" id="3_eqlnh"]
+[ext_resource type="PackedScene" uid="uid://c2vxy5cbn8w8r" path="res://nodes/bubble_wrap.tscn" id="4_q2xi5"]
+[ext_resource type="Script" path="res://scripts/mouse_controller.gd" id="4_upcrl"]
+[ext_resource type="FontFile" uid="uid://dck6c2jk63pfu" path="res://BUBBLEGUMS.TTF" id="6_qme36"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ribmy"]
+font_size = 32
+
+[node name="Node2D" type="Node2D"]
+
+[node name="scroller" type="Sprite2D" parent="."]
+texture = ExtResource("1_7v4h7")
+offset = Vector2(0, 512)
+
+[node name="scrollarea" type="Sprite2D" parent="scroller" node_paths=PackedStringArray("scroll_area", "bubbles_parent")]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("2_xavpo")
+scroll_area = NodePath("..")
+bubbles_parent = NodePath("bubbles")
+bubble_norm = ExtResource("3_eqlnh")
+background_image = ExtResource("4_q2xi5")
+
+[node name="bubbles" type="Node2D" parent="scroller/scrollarea"]
+
+[node name="bubble" parent="scroller/scrollarea/bubbles" instance=ExtResource("3_eqlnh")]
+visible = false
+position = Vector2(-384, -128)
+
+[node name="bubble2" parent="scroller/scrollarea/bubbles" instance=ExtResource("3_eqlnh")]
+visible = false
+position = Vector2(-128, -128)
+
+[node name="bubble3" parent="scroller/scrollarea/bubbles" instance=ExtResource("3_eqlnh")]
+visible = false
+position = Vector2(128, -128)
+
+[node name="bubble4" parent="scroller/scrollarea/bubbles" instance=ExtResource("3_eqlnh")]
+visible = false
+position = Vector2(384, -128)
+
+[node name="bubble5" parent="scroller/scrollarea/bubbles" instance=ExtResource("3_eqlnh")]
+visible = false
+position = Vector2(-384, -384)
+
+[node name="Node2D" type="Node2D" parent="scroller/scrollarea"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 512)
+
+[node name="mouse_controller" type="Node2D" parent="." node_paths=PackedStringArray("scroller", "line", "score_text", "reset_button")]
+script = ExtResource("4_upcrl")
+scroller = NodePath("../scroller/scrollarea")
+line = NodePath("hit_preview")
+score_text = NodePath("../Score")
+reset_button = NodePath("../Button")
+
+[node name="hit_preview" type="Line2D" parent="mouse_controller"]
+points = PackedVector2Array(-100, 0, -206, 47, -166, -65)
+closed = true
+width = 4.0
+default_color = Color(1, 0, 0, 0.498039)
+
+[node name="Score" type="Label" parent="."]
+offset_left = -490.0
+offset_top = 30.0
+offset_right = -190.0
+offset_bottom = 130.0
+theme_override_fonts/font = ExtResource("6_qme36")
+text = "Score: 0"
+label_settings = SubResource("LabelSettings_ribmy")
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 326.0
+offset_top = 20.0
+offset_right = 490.0
+offset_bottom = 95.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("6_qme36")
+text = "Restart"
+
+[node name="Label" type="Label" parent="."]
+offset_left = -250.0
+offset_top = 900.0
+offset_right = 250.0
+offset_bottom = 1000.0
+theme_override_font_sizes/font_size = 50
+text = "PIPPY POPPY"
+horizontal_alignment = 1
+vertical_alignment = 2
